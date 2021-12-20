@@ -1,0 +1,82 @@
+version: '3.1'
+
+services:
+  openapi-firewall:
+    image: nginx:alpine
+    container_name: openapi-firewall
+    ports:
+      - 1337:1337
+    volumes:
+      - /data/app/openapi/conf/nginx.conf:/etc/nginx/nginx.conf
+      - /data/app/openapi/conf/nginx-whitelist.conf:/etc/nginx/shared-configs/whitelist.conf
+      - /data/log/openapi/nginx:/var/log/nginx
+    depends_on:
+      - openapi-dashboard
+    networks:
+      open-apigateway.net:
+        ipv4_address: 172.28.1.10
+    restart: always
+  openapi-gateway:
+    image: kong:alpine
+    container_name: openapi-gateway
+    ports:
+      - 443:8443
+    volumes:
+      - /data/app/openapi/conf/kong.conf:/etc/kong/kong.conf
+      - /data/log/openapi/gateway:/usr/local/kong/logs
+    environment:
+      - KONG_DATABASE=postgres
+      - KONG_PG_HOST=openapi-gateway-db
+      - KONG_PG_PORT=5432
+      - KONG_PG_PASSWORD=kong
+    sysctls:
+      - net.ipv4.tcp_tw_reuse=1
+      - net.ipv4.tcp_fin_timeout=30
+    depends_on:
+      - openapi-gateway-db
+    networks:
+      open-apigateway.net:
+        ipv4_address: 172.28.1.11
+    restart: always
+  openapi-gateway-db:
+    image: postgres:11-alpine
+    container_name: openapi-gateway-db
+    volumes:
+      - vol-openapi-gateway-db:/var/lib/postgresql/data
+    networks:
+      open-apigateway.net:
+        ipv4_address: 172.28.1.12
+    restart: always
+  openapi-dashboard:
+    image: pantsel/konga:latest
+    container_name: openapi-dashboard
+    environment:
+      - DB_ADAPTER=postgres
+      - DB_HOST=openapi-dashboard-db
+      - DB_PORT=5432
+      - DB_USER=konga
+      - DB_PASSWORD=konga
+      - NODE_ENV=production
+    depends_on:
+      - openapi-dashboard-db
+    networks:
+      open-apigateway.net:
+        ipv4_address: 172.28.1.13
+    restart: always
+  openapi-dashboard-db:
+    image: postgres:11-alpine
+    container_name: openapi-dashboard-db
+    volumes:
+      - vol-openapi-dashboard-db:/var/lib/postgresql/data
+    networks:
+      open-apigateway.net:
+        ipv4_address: 172.28.1.14
+    restart: always
+volumes:
+  vol-openapi-gateway-db:
+    external: true
+  vol-openapi-dashboard-db:
+    external: true
+networks:
+  openapi-gateway.net:
+    external: true
