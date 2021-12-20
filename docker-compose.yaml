@@ -7,9 +7,9 @@ services:
     ports:
       - 1337:1337
     volumes:
-      - /data/app/openapi/conf/nginx.conf:/etc/nginx/nginx.conf
-      - /data/app/openapi/conf/nginx-whitelist.conf:/etc/nginx/shared-configs/whitelist.conf
-      - /data/log/openapi/nginx:/var/log/nginx
+      - /data/app/openapi-gateway/conf/nginx.conf:/etc/nginx/nginx.conf
+      - /data/app/openapi-gateway/conf/nginx-whitelist.conf:/etc/nginx/shared-configs/whitelist.conf
+      - /data/log/openapi-gateway/nginx:/var/log/nginx
     depends_on:
       - openapi-dashboard
     networks:
@@ -22,8 +22,8 @@ services:
     ports:
       - 443:8443
     volumes:
-      - /data/app/openapi/conf/kong.conf:/etc/kong/kong.conf
-      - /data/log/openapi/gateway:/usr/local/kong/logs
+      - /data/app/openapi-gateway/conf/kong.conf:/etc/kong/kong.conf
+      - /data/log/openapi-gateway/gateway:/usr/local/kong/logs
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=openapi-gateway-db
