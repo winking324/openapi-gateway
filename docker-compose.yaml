@@ -13,7 +13,7 @@ services:
     depends_on:
       - openapi-dashboard
     networks:
-      open-apigateway.net:
+      openapi-gateway.net:
         ipv4_address: 172.28.1.10
     restart: always
   openapi-gateway:
@@ -35,7 +35,7 @@ services:
     depends_on:
       - openapi-gateway-db
     networks:
-      open-apigateway.net:
+      openapi-gateway.net:
         ipv4_address: 172.28.1.11
     restart: always
   openapi-gateway-db:
@@ -44,7 +44,7 @@ services:
     volumes:
       - vol-openapi-gateway-db:/var/lib/postgresql/data
     networks:
-      open-apigateway.net:
+      openapi-gateway.net:
         ipv4_address: 172.28.1.12
     restart: always
   openapi-dashboard:
@@ -60,7 +60,7 @@ services:
     depends_on:
       - openapi-dashboard-db
     networks:
-      open-apigateway.net:
+      openapi-gateway.net:
         ipv4_address: 172.28.1.13
     restart: always
   openapi-dashboard-db:
@@ -69,7 +69,7 @@ services:
     volumes:
       - vol-openapi-dashboard-db:/var/lib/postgresql/data
     networks:
-      open-apigateway.net:
+      openapi-gateway.net:
         ipv4_address: 172.28.1.14
     restart: always
 volumes:
