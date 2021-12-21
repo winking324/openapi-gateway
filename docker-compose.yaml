@@ -23,7 +23,7 @@ services:
       - 443:8443
     volumes:
       - /data/app/openapi-gateway/conf/kong.conf:/etc/kong/kong.conf
-      - /data/log/openapi-gateway/gateway:/usr/local/kong/logs
+      - /data/log/openapi-gateway/gateway:/usr/local/kong/filelogs
     environment:
       - KONG_DATABASE=postgres
       - KONG_PG_HOST=openapi-gateway-db
