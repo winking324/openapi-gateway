@@ -13,8 +13,8 @@ services:
     depends_on:
       - openapi-dashboard
     networks:
-      openapi-gateway.net:
-        ipv4_address: 172.28.1.10
+      - openapi-gateway.net
+      - app.net
     restart: always
   openapi-gateway:
     image: kong:alpine
@@ -35,8 +35,8 @@ services:
     depends_on:
       - openapi-gateway-db
     networks:
-      openapi-gateway.net:
-        ipv4_address: 172.28.1.11
+      - openapi-gateway.net
+      - app.net
     restart: always
   openapi-gateway-db:
     image: postgres:11-alpine
@@ -44,8 +44,8 @@ services:
     volumes:
       - vol-openapi-gateway-db:/var/lib/postgresql/data
     networks:
-      openapi-gateway.net:
-        ipv4_address: 172.28.1.12
+      - openapi-gateway.net
+      - app.net
     restart: always
   openapi-dashboard:
     image: pantsel/konga:latest
@@ -60,8 +60,8 @@ services:
     depends_on:
       - openapi-dashboard-db
     networks:
-      openapi-gateway.net:
-        ipv4_address: 172.28.1.13
+      - openapi-gateway.net
+      - app.net
     restart: always
   openapi-dashboard-db:
     image: postgres:11-alpine
@@ -69,8 +69,8 @@ services:
     volumes:
       - vol-openapi-dashboard-db:/var/lib/postgresql/data
     networks:
-      openapi-gateway.net:
-        ipv4_address: 172.28.1.14
+      - openapi-gateway.net
+      - app.net
     restart: always
 volumes:
   vol-openapi-gateway-db:
@@ -79,4 +79,6 @@ volumes:
     external: true
 networks:
   openapi-gateway.net:
+    external: true
+  app.net:
     external: true
