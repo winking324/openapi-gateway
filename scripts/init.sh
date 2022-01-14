@@ -5,7 +5,7 @@ OPENAPI_NET=openapi-gateway.net
 # 1 init
 docker volume create vol-openapi-gateway-db
 docker volume create vol-openapi-dashboard-db
-docker network create --subnet 172.28.1.0/24 ${OPENAPI_NET}
+docker network create ${OPENAPI_NET}
 
 # 2 init konga
 ## 2.1 create konga database
